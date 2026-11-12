@@ -3,6 +3,7 @@ version: "0.1.0"
 slug: whatsapp_mcp
 description: WhatsApp-Brücke (whatsmeow, lharries/whatsapp-mcp) mit MCP-Server für Claude-Connectoren
 url: https://github.com/lharries/whatsapp-mcp
+image: ghcr.io/patricklis91/{arch}-addon-whatsapp_mcp
 arch:
   - amd64
   - aarch64
