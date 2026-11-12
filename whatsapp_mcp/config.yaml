@@ -1,0 +1,22 @@
+name: WhatsApp MCP
+version: "0.1.0"
+slug: whatsapp_mcp
+description: WhatsApp-Brücke (whatsmeow, lharries/whatsapp-mcp) mit MCP-Server für Claude-Connectoren
+url: https://github.com/lharries/whatsapp-mcp
+arch:
+  - amd64
+  - aarch64
+init: false
+startup: application
+boot: auto
+watchdog: tcp://[HOST]:[PORT:8000]
+ports:
+  8000/tcp: null
+ports_description:
+  8000/tcp: MCP-Server (nur bei Bedarf freigeben, normalerweise über Nginx Proxy Manager)
+options:
+  access_key: ""
+  timezone: Europe/Berlin
+schema:
+  access_key: str?
+  timezone: str

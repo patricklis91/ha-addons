@@ -1,0 +1,23 @@
+diff --git a/whatsapp-bridge/main.go b/whatsapp-bridge/main.go
+index d1e0270..fda95a6 100644
+--- a/whatsapp-bridge/main.go
++++ b/whatsapp-bridge/main.go
+@@ -775,7 +775,7 @@ func startRESTServer(client *whatsmeow.Client, messageStore *MessageStore, port
+ 	})
+ 
+ 	// Start the server
+-	serverAddr := fmt.Sprintf(":%d", port)
++	serverAddr := fmt.Sprintf("127.0.0.1:%d", port)
+ 	fmt.Printf("Starting REST API server on %s...\n", serverAddr)
+ 
+ 	// Run server in a goroutine so it doesn't block
+@@ -871,7 +871,9 @@ func main() {
+ 			if evt.Event == "code" {
+ 				fmt.Println("\nScan this QR code with your WhatsApp app:")
+ 				qrterminal.GenerateHalfBlock(evt.Code, qrterminal.L, os.Stdout)
++				_ = os.WriteFile("store/qr.txt", []byte(evt.Code), 0600)
+ 			} else if evt.Event == "success" {
++				_ = os.Remove("store/qr.txt")
+ 				connected <- true
+ 				break
+ 			}
