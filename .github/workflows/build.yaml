@@ -34,7 +34,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Version aus config.yaml lesen
         id: ver
-        run: echo "version=$(grep '^version:' whatsapp_mcp/config.yaml | sed 's/version: *\"\?\([^\"]*\)\"\?/\1/')" >> "$GITHUB_OUTPUT"
+        run: |
+          v=$(sed -n 's/^version:[[:space:]]*"\{0,1\}\([^"]*\)"\{0,1\}$/\1/p' whatsapp_mcp/config.yaml)
+          echo "version=$v" >> "$GITHUB_OUTPUT"
       - uses: docker/build-push-action@v6
         with:
           context: whatsapp_mcp
