@@ -1,5 +1,5 @@
 name: WhatsApp MCP
-version: "0.1.0"
+version: "0.1.1"
 slug: whatsapp_mcp
 description: WhatsApp-Brücke (whatsmeow, lharries/whatsapp-mcp) mit MCP-Server für Claude-Connectoren
 url: https://github.com/lharries/whatsapp-mcp

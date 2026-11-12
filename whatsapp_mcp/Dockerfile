@@ -2,7 +2,7 @@ ARG BUILD_FROM
 ARG UPSTREAM_COMMIT=7d6a06dcdce1f01dfb24f60e1030d5efba9f3b88
 
 # --- Stage 1: WhatsApp-Bruecke (Go, braucht CGO fuer SQLite) ---
-FROM golang:1.24-alpine3.20 AS bridge
+FROM golang:alpine AS bridge
 ARG UPSTREAM_COMMIT
 RUN apk add --no-cache git gcc musl-dev
 WORKDIR /src
@@ -11,6 +11,8 @@ RUN git clone https://github.com/lharries/whatsapp-mcp.git . \
 COPY bridge.patch /tmp/bridge.patch
 RUN git apply /tmp/bridge.patch
 WORKDIR /src/whatsapp-bridge
+# whatsmeow aktuell halten, sonst weist WhatsApp den Client ab ("Client outdated")
+RUN go get go.mau.fi/whatsmeow@latest && go mod tidy
 RUN CGO_ENABLED=1 go build -o /out/whatsapp-bridge .
 RUN cp -r /src/whatsapp-mcp-server /out/whatsapp-mcp-server
 
