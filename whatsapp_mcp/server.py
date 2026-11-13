@@ -24,6 +24,33 @@ from starlette.responses import HTMLResponse, Response  # noqa: E402
 KEY = os.environ["ACCESS_KEY"]
 mcp = main.mcp
 
+# Die Tools von lharries geben Dataclasses zurueck; neuere MCP-Versionen
+# validieren gegen die annotierte Dict-Signatur. Daher hier umwandeln.
+import dataclasses  # noqa: E402
+import functools  # noqa: E402
+
+
+def _plain(x):
+    if dataclasses.is_dataclass(x) and not isinstance(x, type):
+        return dataclasses.asdict(x)
+    if isinstance(x, (list, tuple)):
+        return [_plain(i) for i in x]
+    if isinstance(x, dict):
+        return {k: _plain(v) for k, v in x.items()}
+    return x
+
+
+def _wrap(fn):
+    @functools.wraps(fn)
+    def wrapper(*args, **kwargs):
+        return _plain(fn(*args, **kwargs))
+
+    return wrapper
+
+
+for _tool in mcp._tool_manager._tools.values():
+    _tool.fn = _wrap(_tool.fn)
+
 mcp.settings.host = "0.0.0.0"
 mcp.settings.port = int(os.environ.get("PORT", "8000"))
 mcp.settings.streamable_http_path = f"/{KEY}/mcp"
